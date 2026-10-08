@@ -1,23 +1,25 @@
 #include "CfgReader.h"
 
 #include <fstream>
-#include <nlohmann/json.hpp>
 #include <Windows.h>
 
 void getServerConfig(std::string& url, std::string& apiKey, const std::string& configRelativePath) {
-	std::string configFilePath;
-	getConfigFilePath(configFilePath, configRelativePath);
-	std::ifstream configFile(configFilePath);
-
-	if (!configFile) {
-		throw std::runtime_error("Failed to open config file: " + configFilePath);
-	}
 
 	nlohmann::json config;
-	configFile >> config;
+	getConfig(config, configRelativePath);
 
 	url = config["url"].get<std::string>();
 	apiKey = config["api_key"].get<std::string>();
+}
+
+void getConfig(nlohmann::json& config, const std::string& configRelativePath) {
+	std::string configFilePath;
+	getConfigFilePath(configFilePath, configRelativePath);
+	std::ifstream configFile(configFilePath);	
+	if (!configFile) {
+		throw std::runtime_error("Failed to open config file: " + configFilePath);
+	}
+	configFile >> config;
 }
 
 void getExecutablePath(std::string& executablePath) {
