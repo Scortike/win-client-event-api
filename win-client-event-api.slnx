@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="win-client-event-api/win-client-event-api.vcxproj" />
+  <Project Path="win-client-event-api/win-client-event-api.vcxproj" Id="703b0435-025e-408f-9826-cf7bf5cd2019" />
 </Solution>

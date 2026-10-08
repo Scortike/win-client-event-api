@@ -3,9 +3,24 @@
 
 #include <iostream>
 
+
+#include "HttpClient.h"
+#include "CfgReader.h"
+
+
+
 int main()
 {
-    std::cout << "Hello World!\n";
+	std::string url;
+	std::string apiKey;
+
+	getServerConfig(url, apiKey);
+
+    std::cout << "URL: " << url << std::endl;
+    std::cout << "API Key: " << apiKey << std::endl;
+
+	std::cin.get();
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
