@@ -1,17 +1,22 @@
 #include "HttpClient.h"
 
 #include <stdexcept>
+#include <windows.h>
+#include <winhttp.h>
+
+#pragma comment(lib, "winhttp.lib")
 
 WinHttpClient::WinHttpClient(const std::string& url, const std::string& apiKey)
 	: _url(url), _apiKey(apiKey) {
-	// Initialize WinHTTP session
+
 	_session.reset(WinHttpOpen(
 		L"Chernetskyi Client",
-		WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, 
-		WINHTTP_NO_PROXY_NAME, 
-		WINHTTP_NO_PROXY_BYPASS, 
+		WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
+		WINHTTP_NO_PROXY_NAME,
+		WINHTTP_NO_PROXY_BYPASS,
 		0
 	));
+
 	if (!_session) {
 		throw std::runtime_error("Failed to open WinHTTP session");
 	}
@@ -23,4 +28,10 @@ void WinHttpClient::setUrl(const std::string& url) {
 
 void WinHttpClient::setApiKey(const std::string& apiKey) {
 	_apiKey = apiKey;
+}
+
+void WinHttpClient::HandleDeleter::operator()(void* handle) const noexcept {
+	if (handle) {
+		WinHttpCloseHandle(handle);
+	}
 }

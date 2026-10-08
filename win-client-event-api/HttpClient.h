@@ -4,18 +4,20 @@
 #endif
 #include <string>
 #include <memory>
-#include <windows.h>
-#include <winhttp.h>
+
 
 class WinHttpClient{
 public:
-	WinHttpClient(const std::string& url, const std::string& apiKey) : _url(url), _apiKey(apiKey) {}
+	WinHttpClient(const std::string& url, const std::string& apiKey);
 	~WinHttpClient() = default;
 
 	void setUrl(const std::string& url);
 	void setApiKey(const std::string& apiKey);
 private:
-	struct HandleDeleter { void operator()(HINTERNET handle) const noexcept; };
+
+	struct HandleDeleter {
+		void operator()(void* handle) const noexcept;
+	};
 
 	using Handle = std::unique_ptr<void, HandleDeleter>;
 
