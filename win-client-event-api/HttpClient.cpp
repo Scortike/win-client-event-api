@@ -28,20 +28,6 @@ std::wstring toUTF8(const std::string& str) {
 	return wideStr;
 }
 
-void replaceAll(std::string& str, const std::string& from, const std::string& to)
-{
-	if (from.empty())
-		return;
-
-	std::size_t pos = 0;
-
-	while ((pos = str.find(from, pos)) != std::string::npos)
-	{
-		str.replace(pos, from.length(), to);
-		pos += to.length();
-	}
-}
-
 WinHttpClient::WinHttpClient(const std::string& url, const std::string& apiKey)
 	: _url(url), _apiKey(apiKey) {
 
@@ -82,17 +68,18 @@ void WinHttpClient::setTimeOut(int seconds) {
 }
 
 HttpResponse WinHttpClient::get(const std::string &target) {
-	return perform("GET", target, nullptr, std::string());
+	return perform("GET", target, nullptr, std::string(), nullptr);
 }
 
-HttpResponse WinHttpClient::post(const std::string& target, const std::string& body, const std::string& content_type) {
-	return perform("POST", target, &body, content_type);
+HttpResponse WinHttpClient::post(const std::string& target, const std::string& body, const std::string& content_type, const std::string* boundary) {
+	return perform("POST", target, &body, content_type, boundary);
 }
 
 HttpResponse WinHttpClient::perform(const std::string& command,
 							const std::string& target, 
 							const std::string* body,
-							const std::string& content_type) {
+							const std::string& content_type,
+							const std::string* boundary) {
 	// connection handle
 	Handle connection(WinHttpConnect(_session.get(),
 									 toUTF8(_url).c_str(),
@@ -123,7 +110,13 @@ HttpResponse WinHttpClient::perform(const std::string& command,
 	if (body) {
 		std::string contentTypeHeader = _config["flag"]["content_type"].get<std::string>();
 		replaceAll(contentTypeHeader, "{content_type}", content_type);
-		headers += toUTF8(contentTypeHeader) + L"\r\n";
+		headers += toUTF8(contentTypeHeader);
+		if (boundary) {
+			std::string baoundaryHeader = _config["flag"]["boundary"].get<std::string>();
+			replaceAll(baoundaryHeader, "{boundary}", *boundary);
+			headers += toUTF8(baoundaryHeader);
+		}
+		headers += L"\r\n";
 	}
 	LPCWSTR headerPtr = WINHTTP_NO_ADDITIONAL_HEADERS;
 	DWORD headerLen = 0;

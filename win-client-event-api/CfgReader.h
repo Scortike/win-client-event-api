@@ -4,6 +4,7 @@
 
 #include "defines.h"
 
+void replaceAll(std::string& str, const std::string& from, const std::string& to);
 
 void getServerConfig(std::string& url, std::string& apiKey, const std::string& configRelativePath = CFG_FILE_PATH);
 

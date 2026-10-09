@@ -8,6 +8,7 @@
 
 #include "CfgReader.h"
 
+std::wstring toUTF8(const std::string& str);
 
 struct HttpResponse {
 	DWORD status;
@@ -26,14 +27,15 @@ public:
 	void setTimeOut(int seconds);
 
 	HttpResponse get(const std::string &target);
-	HttpResponse post(const std::string& target, const std::string& body, const std::string& content_type);
+	HttpResponse post(const std::string& target, const std::string& body, const std::string& content_type, const std::string* boundary = nullptr);
 
 
 private:
 	HttpResponse perform(const std::string& command,
 				 const std::string& target,
 				 const std::string* body,
-				 const std::string& content_type);
+				 const std::string& content_type,
+				 const std::string* boundary);
 
 	struct HandleDeleter {
 		void operator()(void* handle) const noexcept;

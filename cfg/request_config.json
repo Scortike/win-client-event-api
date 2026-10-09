@@ -3,6 +3,6 @@
   "flag": {
     "api_key": "X-API-Key: {api_key}",
     "content_type": "Content-Type: {content_type}",
-    "content_disposition": "Content-Disposition: form-data; name=\"file\"; filename=\"{filename}\""
+    "boundary": "; boundary={boundary}"
   }
 }
