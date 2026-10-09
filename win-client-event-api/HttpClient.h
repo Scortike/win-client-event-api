@@ -48,7 +48,7 @@ public:
 			const bool retryable = response.status == 429 || response.status == 502 ||
 								   response.status == 503 || response.status == 504;
 
-			if (retryable || attempt >= maxRetry)
+			if (!retryable || attempt >= maxRetry)
 			{
 				return response;
 			}
