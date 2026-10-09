@@ -152,11 +152,13 @@
     <ClCompile Include="CfgReader.cpp" />
     <ClCompile Include="CfgReader.h" />
     <ClCompile Include="HttpClient.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="win-client-event-api.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h" />
     <ClInclude Include="HttpClient.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\cfg\api_config.json" />
