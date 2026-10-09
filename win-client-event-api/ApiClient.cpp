@@ -33,15 +33,15 @@ HttpResponse ApiClient::getEvents() {
 	return response;
 }
 
-HttpResponse ApiClient::postEvent(const int& eventCode, const std::string& fileName) {
+HttpResponse ApiClient::postEvent(const std::string& fileName) {
 	std::string timestamp = getTimestamp();
 	std::string uuid = getUUID();
 	nlohmann::json event = _config["patterns"].at("post_event");
 
 	event["timestamp"] = timestamp;
 	event["event_uid"] = uuid;
-	event["event_code"] = 1;
-	event["file_name"] = "test1.jpg";
+	event["event_code"] = 1 + rand() % 10;
+	event["file_name"] = fileName;
 
 	std::string body = event.dump();
 
