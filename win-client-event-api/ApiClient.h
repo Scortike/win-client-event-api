@@ -14,8 +14,8 @@ public:
 
 	HttpResponse getStatus();
 	HttpResponse getEvents();
-	HttpResponse getEvents(const std::string& filter);
-	HttpResponse postEvent(const int& eventCode, const std::string& fileName);
+	HttpResponse getEventsByFilter(const std::string& filter = "image_uploaded=false");
+	HttpResponse postEvent(const std::string& fileName);
 	HttpResponse postImage(const std::string& eventId, const std::string& filePath, const std::string& filename);
 
 	std::string getTimestamp();

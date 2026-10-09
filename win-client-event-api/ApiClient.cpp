@@ -27,6 +27,14 @@ HttpResponse ApiClient::getStatus() {
 	return response;
 }
 
+HttpResponse ApiClient::getEventsByFilter(const std::string& filter) {
+	std::string target = _config["target"].get<std::string>() 
+		+ _config["end_points"]["event"].get<std::string>()
+		+ "?" + filter;
+	HttpResponse response = _httpClient.get(target);
+	return response;
+}
+
 HttpResponse ApiClient::getEvents() {
 	std::string target = _config["target"].get<std::string>() + _config["end_points"]["event"].get<std::string>();
 	HttpResponse response = _httpClient.get(target);
