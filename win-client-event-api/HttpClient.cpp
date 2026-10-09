@@ -68,11 +68,20 @@ void WinHttpClient::setTimeOut(int seconds) {
 }
 
 HttpResponse WinHttpClient::get(const std::string &target) {
-	return perform("GET", target, nullptr, std::string(), nullptr);
+	HttpResponse response = execWithRetry([&]()
+		{
+			return perform("GET", target, nullptr, std::string(), nullptr);
+		});
+	return response;
 }
 
 HttpResponse WinHttpClient::post(const std::string& target, const std::string& body, const std::string& content_type, const std::string* boundary) {
-	return perform("POST", target, &body, content_type, boundary);
+	HttpResponse response = execWithRetry([&]()
+		{
+			return perform("POST", target, &body, content_type, boundary);
+		});
+	return response;
+	
 }
 
 HttpResponse WinHttpClient::perform(const std::string& command,
@@ -174,4 +183,36 @@ HttpResponse WinHttpClient::perform(const std::string& command,
 	} while (bufSize > 0);
 
 	return response;
+}
+
+HttpStatusCategory WinHttpClient::classifyStatus(const DWORD& statuscode) {
+	if (statuscode >= 200 && statuscode < 300)
+		return HttpStatusCategory::Success;
+	if (statuscode >= 400 && statuscode < 500)
+		return HttpStatusCategory::ClientError;
+	if (statuscode >= 500 && statuscode < 600)
+		return HttpStatusCategory::ServerError;
+
+	return HttpStatusCategory::Unexpected;
+}
+
+std::string WinHttpClient::responceHandle(const HttpResponse& res) {
+	std::stringstream ss;
+
+	if (classifyStatus(res.status) == HttpStatusCategory::Success) {
+		ss << "Success!" << std::endl;
+		ss << "CODE: " << res.status << std::endl;
+		nlohmann::json body = nlohmann::json::parse(res.body);
+		ss << body.dump(4) << std::endl;
+	}
+	else {
+		ss << "ERORR!!!" << std::endl;
+		nlohmann::json body = nlohmann::json::parse(res.body);
+		ss << "CODE: " << res.status << " " << body["error"]["code"].get<std::string>() << std::endl;
+		ss << "Message: " << body["error"]["message"].get<std::string>() << std::endl;
+		ss << body["error"]["details"].dump(4);
+
+	}
+	return ss.str();
+
 }

@@ -5,10 +5,20 @@
 #include <string>
 #include <memory>
 #include <windows.h>
+#include <thread>
+#include <iostream>
 
 #include "CfgReader.h"
 
 std::wstring toUTF8(const std::string& str);
+
+enum class HttpStatusCategory
+{
+	Success,
+	ClientError,
+	ServerError,
+	Unexpected
+};
 
 struct HttpResponse {
 	DWORD status;
@@ -28,6 +38,30 @@ public:
 
 	HttpResponse get(const std::string &target);
 	HttpResponse post(const std::string& target, const std::string& body, const std::string& content_type, const std::string* boundary = nullptr);
+
+	template <typename Operation>
+	HttpResponse execWithRetry(Operation&& operation, int maxRetry = 4) {
+		for (int attempt = 0;; ++attempt)
+		{
+			HttpResponse response = operation();
+			std::cout << responceHandle(response);
+
+			if (response.status != 429 || attempt >= maxRetry)
+			{
+				return response;
+			}
+			int delay_s = 1 << attempt;
+
+			std::cout << "Retry send request in " << delay_s << " secs." << std::endl;
+			
+			const auto delay = std::chrono::seconds(delay_s);
+			std::this_thread::sleep_for(delay);
+		}
+	}
+
+	std::string responceHandle(const HttpResponse& res);
+
+	HttpStatusCategory classifyStatus(const DWORD& statusCode);
 
 
 private:
