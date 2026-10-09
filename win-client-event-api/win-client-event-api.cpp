@@ -8,17 +8,20 @@
 
 int main()
 {
-	std::string url;
-	std::string apiKey;
+	try {
+		std::string url;
+		std::string apiKey;
 
-	getServerConfig(url, apiKey);
+		getServerConfig(url, apiKey);
 
-	std::cout << "URL: " << url << std::endl;
-	std::cout << "API Key: " << apiKey << std::endl;
+		std::cout << "URL: " << url << std::endl;
 
-	UI ui(url, apiKey);
-	ui.start();
-
+		UI ui(url, apiKey);
+		ui.start();
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Fatal error:" << e.what() << std::endl;
+	}
 	return 0;
 }
 

@@ -33,7 +33,6 @@ public:
 	void setUrl(const std::string& url);
 	void setApiKey(const std::string& apiKey);
 
-	void setTimeOut() {};
 	void setTimeOut(int seconds);
 
 	HttpResponse get(const std::string &target);
@@ -46,7 +45,10 @@ public:
 			HttpResponse response = operation();
 			std::cout << responseHandle(response);
 
-			if (response.status != 429 || attempt >= maxRetry)
+			const bool retryable = response.status == 429 || response.status == 502 ||
+								   response.status == 503 || response.status == 504;
+
+			if (retryable || attempt >= maxRetry)
 			{
 				return response;
 			}

@@ -39,11 +39,11 @@ WinHttpClient::WinHttpClient(const std::string& url, const std::string& apiKey)
 		0
 	));
 
-	setTimeOut(5);
-
 	if (!_session) {
 		throw std::runtime_error("Failed to open WinHTTP session");
 	}
+
+	setTimeOut(5);
 
 	getConfig(_config, REQUEST_CFG_FILE_PATH);
 }
@@ -199,15 +199,15 @@ HttpStatusCategory WinHttpClient::classifyStatus(const DWORD& statuscode) {
 std::string WinHttpClient::responseHandle(const HttpResponse& res) {
 	std::stringstream ss;
 
+	auto body = nlohmann::json::parse(res.body);
+
 	if (classifyStatus(res.status) == HttpStatusCategory::Success) {
 		ss << "Success!" << std::endl;
 		ss << "CODE: " << res.status << std::endl;
-		nlohmann::json body = nlohmann::json::parse(res.body);
 		ss << body.dump(4) << std::endl;
 	}
 	else {
 		ss << "ERORR!!!" << std::endl;
-		nlohmann::json body = nlohmann::json::parse(res.body);
 		ss << "CODE: " << res.status << " " << body["error"]["code"].get<std::string>() << std::endl;
 		ss << "Message: " << body["error"]["message"].get<std::string>() << std::endl;
 		ss << body["error"]["details"].dump(4);
