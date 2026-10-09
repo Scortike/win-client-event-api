@@ -4,7 +4,15 @@
 #endif
 #include <string>
 #include <memory>
+#include <windows.h>
 
+#include "CfgReader.h"
+
+
+struct HttpResponse {
+	DWORD status;
+	std::string body;
+};
 
 class WinHttpClient{
 public:
@@ -13,7 +21,19 @@ public:
 
 	void setUrl(const std::string& url);
 	void setApiKey(const std::string& apiKey);
+
+	void setTimeOut() {};
+	void setTimeOut(int seconds);
+
+	HttpResponse get(const std::string &target);
+	HttpResponse post(const std::string& target, const std::string& body, const std::string& content_type);
+
+
 private:
+	HttpResponse perform(const std::string& command,
+				 const std::string& target,
+				 const std::string* body,
+				 const std::string& content_type);
 
 	struct HandleDeleter {
 		void operator()(void* handle) const noexcept;
@@ -24,4 +44,5 @@ private:
 	Handle _session;
 	std::string _apiKey;
 	std::string _url;
+	nlohmann::json _config;
 };

@@ -157,6 +157,7 @@
     <ClInclude Include="HttpClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\cfg\request_config.json" />
     <None Include="..\cfg\server_confg.example.json" />
     <None Include="..\cfg\server_config.json" />
   </ItemGroup>
