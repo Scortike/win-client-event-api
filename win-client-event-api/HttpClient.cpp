@@ -196,7 +196,7 @@ HttpStatusCategory WinHttpClient::classifyStatus(const DWORD& statuscode) {
 	return HttpStatusCategory::Unexpected;
 }
 
-std::string WinHttpClient::responceHandle(const HttpResponse& res) {
+std::string WinHttpClient::responseHandle(const HttpResponse& res) {
 	std::stringstream ss;
 
 	if (classifyStatus(res.status) == HttpStatusCategory::Success) {

@@ -44,7 +44,7 @@ public:
 		for (int attempt = 0;; ++attempt)
 		{
 			HttpResponse response = operation();
-			std::cout << responceHandle(response);
+			std::cout << responseHandle(response);
 
 			if (response.status != 429 || attempt >= maxRetry)
 			{
@@ -59,7 +59,7 @@ public:
 		}
 	}
 
-	std::string responceHandle(const HttpResponse& res);
+	std::string responseHandle(const HttpResponse& res);
 
 	HttpStatusCategory classifyStatus(const DWORD& statusCode);
 
