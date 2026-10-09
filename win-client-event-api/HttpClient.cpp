@@ -64,7 +64,7 @@ void WinHttpClient::HandleDeleter::operator()(void* handle) const noexcept {
 
 void WinHttpClient::setTimeOut(int seconds) {
 	int ms = seconds * 1000;
-	WinHttpSetTimeouts(_session.get(), seconds, seconds, seconds, seconds);
+	WinHttpSetTimeouts(_session.get(), ms, ms, ms, ms);
 }
 
 HttpResponse WinHttpClient::get(const std::string &target) {
