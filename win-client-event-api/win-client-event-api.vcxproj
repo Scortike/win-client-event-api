@@ -147,6 +147,8 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ApiClient.h" />
+    <ClCompile Include="ApiClient.cpp" />
     <ClCompile Include="CfgReader.cpp" />
     <ClCompile Include="CfgReader.h" />
     <ClCompile Include="HttpClient.cpp" />
@@ -157,6 +159,7 @@
     <ClInclude Include="HttpClient.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\cfg\api_config.json" />
     <None Include="..\cfg\request_config.json" />
     <None Include="..\cfg\server_confg.example.json" />
     <None Include="..\cfg\server_config.json" />

@@ -1,0 +1,21 @@
+{
+  "target": "/api/v1",
+  "end_points": {
+    "event": "/events",
+    "image": "/events/{event_id}/image",
+    "status": "/status"
+  },
+  "content_type": {
+    "json": "application/json",
+    "image": "multipart/form-data"
+  },
+  "patterns": {
+    "post_event": {
+      "event_uid": "",
+      "event_code": 0,
+      "file_name": "",
+      "timestamp": ""
+    },
+    "post_image": "Content-Disposition: form-data; name=\"file\"; filename=\"{filename}\"\r\nContent-Type: {content_type}"
+  }
+}
